@@ -2,22 +2,19 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>The管 | Tube Channel</title>
+<title>关于PLUMED中BEMeta的语法 | Tube Channel</title>
 <link rel="shortcut icon" href="https://koshkatheguan.github.io/favicon.ico?v=1600517973199">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://koshkatheguan.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="The管 | Tube Channel - Atom Feed" href="https://koshkatheguan.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="关于PLUMED中BEMeta的语法 | Tube Channel - Atom Feed" href="https://koshkatheguan.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="
-我真的不知道你是怎么找到这里的！
-但是真心欢迎你。
-
-01010111 01100101 01101100 01100011 01101111 01101101 01100101 
-                            ..." />
-    <meta name="keywords" content="" />
+    <meta name="description" content="PLUMED官网的示例使用Gromacs2018及以前的版本，使用-multi -replex等指定副本，所有也文件可以放在一个文件夹内，使用@replicas语法来指定不同副本的bias：
+[/dir] ls
+plumed.dat top..." />
+    <meta name="keywords" content="PLUMED,MetaD" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
@@ -79,44 +76,67 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              The管
+              关于PLUMED中BEMeta的语法
             </h2>
             <div class="post-info">
               <span>
-                2019-01-25
+                2020-09-19
               </span>
               <span>
-                1 min read
+                2 min read
               </span>
+              
+                <a href="https://koshkatheguan.github.io/tag/S7OTr-yNf/" class="post-tag">
+                  # PLUMED
+                </a>
+              
+                <a href="https://koshkatheguan.github.io/tag/WJdMdZXiQE/" class="post-tag">
+                  # MetaD
+                </a>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <blockquote>
-<p>我真的不知道你是怎么找到这里的！<br>
-但是真心欢迎你。</p>
-</blockquote>
-<pre><code>01010111 01100101 01101100 01100011 01101111 01101101 01100101 
-                                                               
-01100010 01111001  01000111 01011000 01011001   
-
-.##......##.########.##........######...#######..##.....##.########
-.##..##..##.##.......##.......##....##.##.....##.###...###.##......
-.##..##..##.##.......##.......##.......##.....##.####.####.##......
-.##..##..##.######...##.......##.......##.....##.##.###.##.######..
-.##..##..##.##.......##.......##.......##.....##.##.....##.##......
-.##..##..##.##.......##.......##....##.##.....##.##.....##.##......
-..###..###..########.########..######...#######..##.....##.########
-                                                                   
-                                                                   
-.########..##....##.....######...##.....##.##....##                
-.##.....##..##..##.....##....##...##...##...##..##.                
-.##.....##...####......##..........##.##.....####..                
-.########.....##.......##...####....###.......##...                
-.##.....##....##.......##....##....##.##......##...                
-.##.....##....##.......##....##...##...##.....##...                
-.########.....##........######...##.....##....##...                
+                <p>PLUMED官网的示例使用Gromacs2018及以前的版本，使用-multi -replex等指定副本，所有也文件可以放在一个文件夹内，使用@replicas语法来指定不同副本的bias：</p>
+<pre><code class="language-bash">[/dir] ls
+plumed.dat topol0.tpr topol1.tpr topol2.tpr topol3.tpr topol4.tpr structure.pdb
+[/dir] vi plumed.dat
+cv1: ...
+cv2: ...
+cv3: ...
+cv4: ...
+metad: METAD ...
+  ARG=@replicas:{cv1,cv2,cv3,cv4}
+  HEIGHT=@replicas:{?,?,?,?}
+  PACE=?
+  BIASFACTOR=?
+  SIGMA=@replicas:{?,?,?,?}
+  TEMP=?
+  FILE=HILLS
+...
+[/dir] mpirun -np ?? gmx_mpi mdrun -v -plumed plumed.dat -multi 4 -replex ????? -nsteps ?????????
+</code></pre>
+<p>Plumed x gromacs2019及以后 (以2019.6为例，无-multi语法，全部改用-multidir)，每个副本文件夹内都需要plumed-common.dat与plumed.x.dat(其中需要include plumed-common.dat)和两个tpr文件：</p>
+<pre><code class="language-bash">[/dir] ls
+rep0  rep1  rep2  rep3
+[/dir/rep0] ls
+plumed-common.dat plumed.0.dat topol.tpr topol0.tpr
+[/dir/rep1] ls
+plumed-common.dat plumed.1.dat topol.tpr topol1.tpr
+...
+[/dir/rep0] vi plumed-common.dat
+cv1: ...
+cv2: ...
+cv3: ...
+cv4: ...
+#LOWER_WALLS ... (restraints)
+#UPPER_WALLS ... (restraints)
+[/dir/rep0] vi plumed.0.dat
+INCLUDE FILE=plumed-common.dat
+metad_cv1: METAD ARG=cv1 PACE=??? HEIGHT=? SIGMA=? BIASFACTOR=? TEMP=? FILE=HILLS
+[/dir]
+mpirun -np ?? gmx_mpi mdrun -v -multidir rep0 rep1 rep2 rep3 -s topol -deffnm ?? -plumed plumed.dat -replex ????? -nsteps ?????????
 </code></pre>
 
               </div>
@@ -127,6 +147,15 @@
           </article>
         </div>
 
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://koshkatheguan.github.io/post/wham-theo/">
+              <h3 class="post-title">
+                关于WHAM
+              </h3>
+            </a>
+          </div>
         
 
         
