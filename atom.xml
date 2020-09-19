@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://koshkatheguan.github.io</id>
-    <title>Gridea</title>
-    <updated>2020-09-19T09:12:47.709Z</updated>
+    <title>Tube Channel</title>
+    <updated>2020-09-19T09:20:41.920Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://koshkatheguan.github.io"/>
     <link rel="self" href="https://koshkatheguan.github.io/atom.xml"/>
-    <subtitle>温故而知新</subtitle>
+    <subtitle>But what if that moment&apos;s right now</subtitle>
     <logo>https://koshkatheguan.github.io/images/avatar.png</logo>
     <icon>https://koshkatheguan.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2020, Gridea</rights>
+    <rights>All rights reserved 2020, Tube Channel</rights>
     <entry>
         <title type="html"><![CDATA[关于WHAM]]></title>
         <id>https://koshkatheguan.github.io/post/guan-yu-wham/</id>
