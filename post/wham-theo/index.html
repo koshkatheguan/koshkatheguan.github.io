@@ -1,22 +1,103 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://koshkatheguan.github.io</id>
-    <title>Tube Channel</title>
-    <updated>2020-09-19T11:20:13.371Z</updated>
-    <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://koshkatheguan.github.io"/>
-    <link rel="self" href="https://koshkatheguan.github.io/atom.xml"/>
-    <subtitle>But what if that moment&apos;s right now</subtitle>
-    <logo>https://koshkatheguan.github.io/images/avatar.png</logo>
-    <icon>https://koshkatheguan.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2020, Tube Channel</rights>
-    <entry>
-        <title type="html"><![CDATA[关于WHAM]]></title>
-        <id>https://koshkatheguan.github.io/post/wham-theo/</id>
-        <link href="https://koshkatheguan.github.io/post/wham-theo/">
-        </link>
-        <updated>2020-09-19T09:06:05.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="关于wham">关于WHAM</h2>
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>关于WHAM | Tube Channel</title>
+<link rel="shortcut icon" href="https://koshkatheguan.github.io/favicon.ico?v=1600514394336">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://koshkatheguan.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="关于WHAM | Tube Channel - Atom Feed" href="https://koshkatheguan.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="关于WHAM
+大家好哦！我想来分享一下对WHAM算法的观后感（？），并且整理下思路！
+公式我用mkd打一下哦。
+数学推导
+概率分布p_ij和p_j^{\circ}如果有以下关系：
+pij=ficijpj∘p_{ij} = f_i c_{ij..." />
+    <meta name="keywords" content="算法" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://koshkatheguan.github.io">
+  <img class="avatar" src="https://koshkatheguan.github.io/images/avatar.png?v=1600514394336" alt="">
+  </a>
+  <h1 class="site-title">
+    Tube Channel
+  </h1>
+  <p class="site-description">
+    But what if that moment's right now
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              关于WHAM
+            </h2>
+            <div class="post-info">
+              <span>
+                2020-09-19
+              </span>
+              <span>
+                4 min read
+              </span>
+              
+                <a href="https://koshkatheguan.github.io/tag/JNEJof0Lt/" class="post-tag">
+                  # 算法
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h2 id="关于wham">关于WHAM</h2>
 <p>大家好哦！我想来分享一下对WHAM算法的观后感（？），并且整理下思路！</p>
 <p>公式我用mkd打一下哦。</p>
 <h2 id="数学推导">数学推导</h2>
@@ -89,6 +170,77 @@
     # return weights
     return w
 </code></pre>
-]]></content>
-    </entry>
-</feed>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E5%85%B3%E4%BA%8Ewham">关于WHAM</a></li>
+<li><a href="#%E6%95%B0%E5%AD%A6%E6%8E%A8%E5%AF%BC">数学推导</a></li>
+<li><a href="#%E8%BF%AD%E4%BB%A3">迭代</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://koshkatheguan.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
