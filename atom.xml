@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://koshkatheguan.github.io</id>
     <title>Tube Channel</title>
-    <updated>2020-09-19T12:19:40.923Z</updated>
+    <updated>2020-09-23T05:38:25.582Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://koshkatheguan.github.io"/>
     <link rel="self" href="https://koshkatheguan.github.io/atom.xml"/>
@@ -10,6 +10,64 @@
     <logo>https://koshkatheguan.github.io/images/avatar.png</logo>
     <icon>https://koshkatheguan.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Tube Channel</rights>
+    <entry>
+        <title type="html"><![CDATA[关于使用MDtraj来处理native contact与qscore]]></title>
+        <id>https://koshkatheguan.github.io/post/guan-yu-shi-yong-mdtraj-lai-chu-li-native-contact-yu-qscore/</id>
+        <link href="https://koshkatheguan.github.io/post/guan-yu-shi-yong-mdtraj-lai-chu-li-native-contact-yu-qscore/">
+        </link>
+        <updated>2020-09-23T05:34:18.000Z</updated>
+        <content type="html"><![CDATA[<p>我先前只有使用mdtraj来处理gromacs+bulk water的经验，现在终于可以做些别的了！！<br>
+来贴一下最终我的代码惹。</p>
+<pre><code class="language-python">#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+&quot;&quot;&quot;
+Created on Mon Sep 21 21:17:02 2020
+
+@author: u
+&quot;&quot;&quot;
+
+import mdtraj as md
+import numpy as np
+import time
+
+def get_contacts(filename, unit1, unit2):
+    contacts = []
+    f = open(filename,'r')
+    for line in f:
+        line = line.split()
+        if len(line)&gt;0:
+            if line[0] == 'contact':
+                if int(line[2]) == unit1 and int(line[3]) == unit2:
+                    contacts.append( (int(line[4]), int(line[5]), float(line[8])) )
+    return contacts
+
+contacts = get_contacts('cd44_cut10p0_eps1p1_goscale0p9.ninfo',1,2)
+
+traj = md.load_dcd('cd44_410_n000.dcd',top = 'cd44_410_n000.pdb')
+
+pairs = np.array([(pair[0]-1, pair[1]-1) for pair in contacts])
+nativedis = np.array([pair[2] for pair in contacts])
+
+def outputq(r, r0, LAMBDA_CONST = 1.2, BETA_CONST = 5):
+    q = np.mean(1.0 / (1 + np.exp(BETA_CONST * (r - LAMBDA_CONST * r0))), axis=1)
+    return q
+
+qlist = []
+s = 0
+starttime = time.time()
+for frame in traj:
+    r = md.compute_distances(frame,pairs)*10
+    r0 = nativedis
+    q = outputq(r,r0)
+    qlist.append(q)
+    s += 1
+    
+endtime = time.time()
+
+print(endtime - starttime)
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[关于PLUMED中BEMeta的语法]]></title>
         <id>https://koshkatheguan.github.io/post/plumed-metad-syntax/</id>
