@@ -2,14 +2,44 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://koshkatheguan.github.io</id>
     <title>Tube with Luv</title>
-    <updated>2020-09-24T01:30:16.372Z</updated>
+    <updated>2020-10-22T07:24:58.141Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://koshkatheguan.github.io"/>
     <link rel="self" href="https://koshkatheguan.github.io/atom.xml"/>
-    <subtitle>But what if that moment&apos;s right now</subtitle>
+    <subtitle>永无止尽的迷宫也是乐园</subtitle>
     <logo>https://koshkatheguan.github.io/images/avatar.png</logo>
     <icon>https://koshkatheguan.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Tube with Luv</rights>
+    <entry>
+        <title type="html"><![CDATA[关于氨基酸的phi和psi角]]></title>
+        <id>https://koshkatheguan.github.io/post/guan-yu-an-ji-suan-de-phi-he-psi-jiao/</id>
+        <link href="https://koshkatheguan.github.io/post/guan-yu-an-ji-suan-de-phi-he-psi-jiao/">
+        </link>
+        <updated>2020-10-22T07:21:54.000Z</updated>
+        <content type="html"><![CDATA[<p>在看关于钙调蛋白2step的文献时候接触到的概念。</p>
+<p>对第N个氨基酸</p>
+<h2 id="phi">Phi：</h2>
+<p>N-1氨基酸的C原子；N氨基酸的N、CA、C形成的二面角。</p>
+<h2 id="psi">Psi：</h2>
+<p>N氨基酸的N原子、CA、C；和N+1氨基酸的N原子形成的二面角</p>
+<p>在Pymol中：<br>
+phi_psi ////20</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[关于sasa&pops]]></title>
+        <id>https://koshkatheguan.github.io/post/guan-yu-sasaandpops/</id>
+        <link href="https://koshkatheguan.github.io/post/guan-yu-sasaandpops/">
+        </link>
+        <updated>2020-10-17T07:32:18.000Z</updated>
+        <content type="html"><![CDATA[<p>4369 &amp; 4368<br>
+计算的网站在：http://webapps.bifi.es/protsa?chronoform=protsa-form&amp;event=submit</p>
+<p>我还是没怎么明白原理，文献里提到的SASA程序也没办法用了。</p>
+<p>原文献是在这里：<br>
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC169007/</p>
+<p>我想试试看以前的ninfo和现在设置过比较短的cutoff的新ninfo，在表面积上apo/holo是不是会有差别什么。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[关于使用MDtraj来处理native contact与qscore]]></title>
         <id>https://koshkatheguan.github.io/post/guan-yu-shi-yong-mdtraj-lai-chu-li-native-contact-yu-qscore/</id>
