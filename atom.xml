@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://koshkatheguan.github.io</id>
     <title>Tube with Luv</title>
-    <updated>2020-10-22T07:24:58.141Z</updated>
+    <updated>2020-11-03T08:11:35.086Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://koshkatheguan.github.io"/>
     <link rel="self" href="https://koshkatheguan.github.io/atom.xml"/>
@@ -10,6 +10,223 @@
     <logo>https://koshkatheguan.github.io/images/avatar.png</logo>
     <icon>https://koshkatheguan.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Tube with Luv</rights>
+    <entry>
+        <title type="html"><![CDATA[REMD tutorial！Alanine dipeptide]]></title>
+        <id>https://koshkatheguan.github.io/post/remd-tutorialalanine-dipeptide/</id>
+        <link href="https://koshkatheguan.github.io/post/remd-tutorialalanine-dipeptide/">
+        </link>
+        <updated>2020-11-03T08:10:53.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="by-管星悦wfli-~may-replica-be-with-you~">by 管星悦@WFLI  ~May replica be with you~</h3>
+<p>大家好哦！今天我们会以Alanine dipeptide为例子来使用练习一下基于Gromacs的副本交换，这边主要给出操作步骤。</p>
+<h2 id="主要内容">主要内容</h2>
+<p>我们会对Alanine dipeptide使用REMD采样，以100K下的自由能面为例，REMD可以帮助我们采样到本需要跨越较高能垒而难以采样到的local minimum，效果如图：</p>
+<p><img src="C:\Users\Administrator.DESKTOP-H1N0QO0\Desktop\Oct\备课\only100.bmp" alt="only100" style="zoom:10%;" caption="100"/>T=100K</p>
+<p><img src="C:\Users\Administrator.DESKTOP-H1N0QO0\Desktop\Oct\备课\remd100.bmp" alt="remd100" style="zoom:10%;" />T=100K, REMD</p>
+<p>本tutorial会分成<strong>显式溶剂模型</strong>和<strong>隐式溶剂模型</strong>。显式溶剂模型中我们会使用真实的水分子，练习到和以前教程一样的步骤；隐式溶剂模型中我们并不加入水分子，甚至不需要添加盒子和nvt-npt平衡(具体请见下文隐式溶剂模型部分)，只需在mdp文件中指明使用GBSA。</p>
+<p><strong>在这个tutorial内使用和加入隐式溶剂模型部分的原因</strong>：</p>
+<p>大家可以尝试用http://folding.bmc.uu.se/remd/来选取合适的副本数与各副本温度，不难发现：使用隐式溶剂比起显式水分子，交换率会高很多，或者说达到同样的温度range和交换率，隐式溶剂比使用实际水分子需要的rep数少很多。交换率也对水分子数敏感。</p>
+<p>这是因为交换接受率由Metropolis准则中的能量差决定，加入更多水分子导致同温差的能量差更大。</p>
+<p>除此之外工作量小。隐式模型的例子能在300s内完成。</p>
+<p>本tutorial会有：</p>
+<ul>
+<li>
+<p>Alanine dipeptide及其反应坐标</p>
+</li>
+<li>
+<p>副本温度选择</p>
+</li>
+<li>
+<p>隐式溶剂模型REMD</p>
+</li>
+<li>
+<p>显式溶剂模型REMD</p>
+</li>
+<li>
+<p>gromacs版本与REMD语法</p>
+</li>
+<li>
+<p>后处理&amp;系综连续与坐标连续</p>
+</li>
+</ul>
+<h2 id="alanine-dipeptide及其反应坐标">Alanine dipeptide及其反应坐标</h2>
+<p>Alanine dipeptide在此作为仅有三个残基的小分子toy model：(作图使用pymol♥)</p>
+<img src="C:\Users\Administrator.DESKTOP-H1N0QO0\Desktop\Nov\1103\hey.png" alt="hey" style="zoom:50%;" />
+<p>反应坐标为中间残基的phi、psi角。</p>
+<p>x号残基的phi角即 (x-1)残基的C原子 - x残基的N原子 - x残基的CA原子 - x残基的C原子   构成的二面角。</p>
+<p>x号残基的psi角即 x残基的N原子 - x残基的CA原子 - x残基的C原子 - (x+1)残基的N原子  构成的二面角。</p>
+<h2 id="副本温度选择">副本温度选择</h2>
+<p>选择等比数列温度：</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>T</mi><mi>i</mi></msub><mo>=</mo><msub><mi>T</mi><mn>0</mn></msub><mo>∗</mo><msup><mi>e</mi><mrow><mi>c</mi><mi>i</mi></mrow></msup></mrow><annotation encoding="application/x-tex">T_i = T_0 * e^{ci}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8746639999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8746639999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">c</span><span class="mord mathdefault mtight">i</span></span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p>也可使用http://folding.bmc.uu.se/remd/来选取合适的副本数与各副本温度。</p>
+<p>选择各个副本的温度使得各个副本之间的交换律能达到预期。</p>
+<p>使用<code>gmx energy</code> 可以输出轨迹的势能，成功交换要求相邻副本的势能分布能有一定重叠，以显式模型使用的温度为例：</p>
+<img src="C:\Users\Administrator.DESKTOP-H1N0QO0\Desktop\Nov\1102\rainbow.bmp" alt="rainbow" style="zoom:15%;" />
+<p>在副本交换的log文件可以查看交换情况，如：</p>
+<pre><code class="language-bash">grep 'Repl ex' *.log
+grep ' x ' *.log
+</code></pre>
+<p>在模拟完成后的log文件会显示交换率和交换矩阵，如：</p>
+<pre><code class="language-bash">Replica exchange statistics
+Repl  9999 attempts, 5000 odd, 4999 even
+Repl  average probabilities:
+Repl     0    1    2    3    4    5    6    7    8    9   10   11   12   13   14   15
+Repl      .84  .84  .83  .83  .83  .82  .82  .82  .81  .81  .80  .80  .80  .79  .88
+Repl  number of exchanges:
+Repl     0    1    2    3    4    5    6    7    8    9   10   11   12   13   14   15
+Repl     4217 4230 4154 4193 4161 4083 4030 4150 4014 4035 3977 3978 3982 3989 4427
+Repl  average number of exchanges:
+Repl     0    1    2    3    4    5    6    7    8    9   10   11   12   13   14   15
+Repl      .84  .85  .83  .84  .83  .82  .81  .83  .80  .81  .80  .80  .80  .80  .89
+</code></pre>
+<h2 id="隐式溶剂模型remd">隐式溶剂模型REMD</h2>
+<p><em>--Warning--</em></p>
+<p>使用版本5.1.4可正常运行，新版gromacs移除了隐式溶剂模型。</p>
+<p><em>--Warning--</em></p>
+<p>我们的输入文件：</p>
+<pre><code class="language-bash">toymodel.pdb	min-implicit.mdp	remd_0.mdp	forbsub.sh
+</code></pre>
+<p>首先我们来<code>pdb2gmx</code>一下！</p>
+<p>(&gt;5 7 指amber99sb力场和no water，编号取决于版本号哦！)</p>
+<pre><code class="language-bash">gmx pdb2gmx -f toymodel.pdb -ter -ignh
+&gt; 5 7
+</code></pre>
+<p>至此我们会得到<code>conf.gro</code> 和 <code>topol.top</code>。</p>
+<p>接下来我们使用minimization：会用到<code>min-implicit.mdp</code>。</p>
+<pre><code class="language-bash">gmx grompp -f min-implicit.mdp -c conf.gro -p topol.top -o min.tpr
+gmx mdrun -deffnm min -v &gt;&amp; min.out &amp;
+</code></pre>
+<p>在此处minimization以后不需要加盒子离子与nvt-npt平衡，这是因为：</p>
+<ul>
+<li>没有使用周期性边界条件</li>
+<li>没有蛋白质-水分子之间的碰撞</li>
+</ul>
+<p>接下来generate一系列（16个）温度的mdp文件，用以下简单的python命令：（bash也可，只是我没写！</p>
+<pre><code class="language-python">d = [100,106.41,113.46,121.23,129.78,139.18,149.6,161.11,173.85,187.95,203.64,220.98,240.18,261.52,285.16,300]
+for num in range(16):
+    temp = d[num]
+    temp = str(temp)
+    print('scp remd_0.mdp remd_'+str(num)+'.mdp')
+    print(&quot;sed -i 's/gen_temp            =  100/gen_temp            = &quot;+temp+&quot;/g' remd_&quot;+str(num)+&quot;.mdp&quot;)
+    print(&quot;sed -i 's/ref_t               =  100/ref_t               = &quot;+temp+&quot;/g' remd_&quot;+str(num)+&quot;.mdp&quot;)
+</code></pre>
+<p>接下来<code>grompp</code>:</p>
+<pre><code class="language-bash">for i in {0..15}; do gmx_mpi grompp -f remd_${i}.mdp -c min.gro -p topol.top -o remd_${i}.tpr; done
+</code></pre>
+<p>运行REMD需要<code>mpirun</code>：</p>
+<pre><code class="language-bash">mpirun -np 8 gmx_mpi mdrun -s remd_.tpr -multi 8 -replex 500 -deffnm remd_ -v
+</code></pre>
+<h2 id="显式溶剂模型remd">显式溶剂模型REMD</h2>
+<p><strong>Gromacs版本：2019.8</strong></p>
+<p>以4个rep为例：</p>
+<pre><code class="language-bash">ls
+toymodel.pdb	minim.mdp	
+nvt0.mdp	nvt1.mdp	nvt2.mdp	nvt3.mdp	
+npt0.mdp	npt1.mdp	npt2.mdp	npt3.mdp
+md0.mdp		md1.mdp		md2.mdp		md3.mdp
+
+vi toymodel.pdb
+
+################
+gmx_mpi pdb2gmx -f toymodel.pdb  -o toy_processed.gro -water spce
+&gt; 5 
+
+gmx_mpi editconf -f toy_processed.gro  -o toy_newbox.gro -c -d 0.5 -bt triclinic
+
+gmx_mpi solvate -cp toy_newbox.gro -cs spc216.gro -o toy_solv.gro -p topol.top
+
+################
+
+mkdir em
+
+gmx_mpi grompp -f minim.mdp -c toy_solv.gro -p topol.top -o em/em.tpr
+
+mkdir rep0 rep1 rep2 rep3
+
+################
+mpirun -np 4N gmx_mpi mdrun -v -deffnm em/em
+gmx_mpi grompp -f nvt0.mdp -c em/em.gro -r em/em.gro -p topol.top -o rep0/nvt.tpr 
+gmx_mpi grompp -f nvt1.mdp -c em/em.gro -r em/em.gro -p topol.top -o rep1/nvt.tpr 
+gmx_mpi grompp -f nvt2.mdp -c em/em.gro -r em/em.gro -p topol.top -o rep2/nvt.tpr 
+gmx_mpi grompp -f nvt3.mdp -c em/em.gro -r em/em.gro -p topol.top -o rep3/nvt.tpr 
+
+mpirun -np N gmx_mpi mdrun -deffnm rep0/nvt &amp;
+mpirun -np N gmx_mpi mdrun -deffnm rep1/nvt &amp;
+mpirun -np N gmx_mpi mdrun -deffnm rep2/nvt &amp;
+mpirun -np N gmx_mpi mdrun -deffnm rep3/nvt 
+###############
+
+gmx_mpi grompp -f npt0.mdp -c rep0/nvt.gro -r rep0/nvt.gro -t rep0/nvt.cpt -p topol.top -o rep0/npt.tpr
+gmx_mpi grompp -f npt1.mdp -c rep1/nvt.gro -r rep1/nvt.gro -t rep1/nvt.cpt -p topol.top -o rep1/npt.tpr
+gmx_mpi grompp -f npt2.mdp -c rep2/nvt.gro -r rep2/nvt.gro -t rep2/nvt.cpt -p topol.top -o rep2/npt.tpr
+gmx_mpi grompp -f npt3.mdp -c rep3/nvt.gro -r rep3/nvt.gro -t rep3/nvt.cpt -p topol.top -o rep3/npt.tpr
+
+mpirun -np N gmx_mpi mdrun -deffnm rep0/npt &amp;
+mpirun -np N gmx_mpi mdrun -deffnm rep1/npt &amp;
+mpirun -np N gmx_mpi mdrun -deffnm rep2/npt &amp;
+mpirun -np N gmx_mpi mdrun -deffnm rep3/npt 
+
+################
+gmx_mpi grompp -f md0.mdp -c rep0/npt.gro -r rep0/npt.gro -t rep0/npt.cpt -p topol.top -o rep0/remd.tpr
+gmx_mpi grompp -f md1.mdp -c rep1/npt.gro -r rep1/npt.gro -t rep1/npt.cpt -p topol.top -o rep1/remd.tpr
+gmx_mpi grompp -f md2.mdp -c rep2/npt.gro -r rep2/npt.gro -t rep2/npt.cpt -p topol.top -o rep2/remd.tpr
+gmx_mpi grompp -f md3.mdp -c rep3/npt.gro -r rep3/npt.gro -t rep3/npt.cpt -p topol.top -o rep3/remd.tpr
+
+mpirun -np 4N gmx_mpi mdrun -v -deffnm remd -multidir rep0 rep1 rep2 rep3 -replex 500
+</code></pre>
+<h2 id="gromacs版本与remd语法">gromacs版本与REMD语法</h2>
+<p>比如隐式溶剂模型的情况，我们使用Gromacs 5.1.4：</p>
+<pre><code class="language-bash">mpirun -np 8 gmx_mpi mdrun -s remd_.tpr -multi 8 -replex 500 -deffnm remd_ -v
+</code></pre>
+<p>2018版本及以前都可以使用<code>-multi</code>语法，在2019版本及以后改为-multidir，如使用的2019.8版本：</p>
+<pre><code class="language-bash">mpirun -np 8 gmx_mpi mdrun -v -deffnm remd -multidir rep0 rep1 rep2 rep3 rep4 rep5 rep6 rep7 rep8 rep9 -replex 500
+</code></pre>
+<h2 id="后处理系综连续与坐标连续">后处理&amp;系综连续与坐标连续</h2>
+<p>使用<code>gmx trjconv</code>可以将<code>trr</code>轨迹转为方便mdtraj读取的<code>xtc</code>轨迹。</p>
+<p>使用mdtraj可以得到各帧的phi、psi角：</p>
+<pre><code class="language-python">import mdtraj as md
+import numpy as np
+
+traj = md.load('./remd_0.xtc', top='./remd_0.gro')
+print(traj)
+
+top = traj.topology
+phiref = np.zeros(shape=(1,4))
+phiref = np.array([[4,6,8,14]])
+psiref = np.array([[6,8,14,16]])
+
+phis = md.compute_dihedrals(traj,phiref)
+psis = md.compute_dihedrals(traj,psiref)
+</code></pre>
+<p>使用<code>matplotlib.pyplot</code>中的<code>hist2d</code>函数可以统计histogram并取负对数统计得到自由能面。</p>
+<p>我们仅对最低温度下的系综感兴趣，使用gmx energy可以统计remd_0轨迹的温度，可以发现温度恒定在100K(隐式溶剂模型的例子)。</p>
+<p>Gromacs在副本间交换的是坐标/构型。所以我们最终得到的remd_0在坐标上是不连续的。</p>
+<p>如果需要得到坐标连续而系综不连续的轨迹，可以使用gromacs bin文件夹中的demux.pl文件：</p>
+<pre><code class="language-bash">demux.pl remd_0.log
+</code></pre>
+<p>可以得到坐标连续的轨迹，这可以帮助我们查看轨迹在各个温度间扩散的情况：</p>
+<p><img src="https://www.plumed.org/doc-v2.5/user-doc/html/belfast-7-pt2temp.png" alt="belfast-7-pt2temp.png" loading="lazy"> 上图引自https://www.plumed.org/doc-v2.5/user-doc/html/belfast-7.html</p>
+<h2 id="结束">结束</h2>
+<p>谢谢你看到这里！</p>
+<p>祝你REMD愉快！</p>
+<p>🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸🌸</p>
+<p>🌺🌺🌺🌺🌺🌺🌺🌺🌺🌺🌺🌺🌺</p>
+<p>🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[WHAM相关工具合集]]></title>
+        <id>https://koshkatheguan.github.io/post/wham-xiang-guan-gong-ju-he-ji/</id>
+        <link href="https://koshkatheguan.github.io/post/wham-xiang-guan-gong-ju-he-ji/">
+        </link>
+        <updated>2020-10-22T07:50:37.000Z</updated>
+        <content type="html"><![CDATA[<ul>
+<li>http://membrane.urmc.rochester.edu/?page_id=126</li>
+<li>PLUMED1.3 reweight.f90</li>
+<li>Pymbar</li>
+</ul>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[关于氨基酸的phi和psi角]]></title>
         <id>https://koshkatheguan.github.io/post/guan-yu-an-ji-suan-de-phi-he-psi-jiao/</id>
@@ -22,8 +239,12 @@
 <p>N-1氨基酸的C原子；N氨基酸的N、CA、C形成的二面角。</p>
 <h2 id="psi">Psi：</h2>
 <p>N氨基酸的N原子、CA、C；和N+1氨基酸的N原子形成的二面角</p>
-<p>在Pymol中：<br>
-phi_psi ////20</p>
+<p>对60？</p>
+<p>59/C, 60/N, 60/CA, 60/C<br>
+ref21 -135.866   -77.795<br>
+60/N, 60/CA, 60/C, 61/N<br>
+ref21 -43.577     -17.469</p>
+<p>28:</p>
 ]]></content>
     </entry>
     <entry>

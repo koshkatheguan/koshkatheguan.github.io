@@ -2,21 +2,22 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>关于使用MDtraj来处理native contact与qscore | Tube with Luv</title>
+<title>WHAM相关工具合集 | Tube with Luv</title>
 <link rel="shortcut icon" href="https://koshkatheguan.github.io/favicon.ico?v=1604391081698">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://koshkatheguan.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="关于使用MDtraj来处理native contact与qscore | Tube with Luv - Atom Feed" href="https://koshkatheguan.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="WHAM相关工具合集 | Tube with Luv - Atom Feed" href="https://koshkatheguan.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="我先前只有使用mdtraj来处理gromacs+bulk water的经验，现在终于可以做些别的了！！
-来贴一下最终我的代码惹。
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-&quot;&q..." />
-    <meta name="keywords" content="mdtraj,qscore,cafemol" />
+    <meta name="description" content="
+http://membrane.urmc.rochester.edu/?page_id=126
+PLUMED1.3 reweight.f90
+Pymbar
+
+" />
+    <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
@@ -78,82 +79,25 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              关于使用MDtraj来处理native contact与qscore
+              WHAM相关工具合集
             </h2>
             <div class="post-info">
               <span>
-                2020-09-23
+                2020-10-22
               </span>
               <span>
-                2 min read
+                1 min read
               </span>
-              
-                <a href="https://koshkatheguan.github.io/tag/H5P9mtFtr/" class="post-tag">
-                  # mdtraj
-                </a>
-              
-                <a href="https://koshkatheguan.github.io/tag/z-ilGS_HUD/" class="post-tag">
-                  # qscore
-                </a>
-              
-                <a href="https://koshkatheguan.github.io/tag/FG0D1xHH9U/" class="post-tag">
-                  # cafemol
-                </a>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>我先前只有使用mdtraj来处理gromacs+bulk water的经验，现在终于可以做些别的了！！<br>
-来贴一下最终我的代码惹。</p>
-<pre><code class="language-python">#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-&quot;&quot;&quot;
-Created on Mon Sep 21 21:17:02 2020
-
-@author: u
-&quot;&quot;&quot;
-
-import mdtraj as md
-import numpy as np
-import time
-
-def get_contacts(filename, unit1, unit2):
-    contacts = []
-    f = open(filename,'r')
-    for line in f:
-        line = line.split()
-        if len(line)&gt;0:
-            if line[0] == 'contact':
-                if int(line[2]) == unit1 and int(line[3]) == unit2:
-                    contacts.append( (int(line[4]), int(line[5]), float(line[8])) )
-    return contacts
-
-contacts = get_contacts('cd44_cut10p0_eps1p1_goscale0p9.ninfo',1,2)
-
-traj = md.load_dcd('cd44_410_n000.dcd',top = 'cd44_410_n000.pdb')
-
-pairs = np.array([(pair[0]-1, pair[1]-1) for pair in contacts])
-nativedis = np.array([pair[2] for pair in contacts])
-
-def outputq(r, r0, LAMBDA_CONST = 1.2, BETA_CONST = 5):
-    q = np.mean(1.0 / (1 + np.exp(BETA_CONST * (r - LAMBDA_CONST * r0))), axis=1)
-    return q
-
-qlist = []
-s = 0
-starttime = time.time()
-for frame in traj:
-    r = md.compute_distances(frame,pairs)*10
-    r0 = nativedis
-    q = outputq(r,r0)
-    qlist.append(q)
-    s += 1
-    
-endtime = time.time()
-
-print(endtime - starttime)
-</code></pre>
+                <ul>
+<li>http://membrane.urmc.rochester.edu/?page_id=126</li>
+<li>PLUMED1.3 reweight.f90</li>
+<li>Pymbar</li>
+</ul>
 
               </div>
               <div class="toc-container">
@@ -166,9 +110,9 @@ print(endtime - starttime)
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://koshkatheguan.github.io/post/plumed-metad-syntax/">
+            <a href="https://koshkatheguan.github.io/post/guan-yu-an-ji-suan-de-phi-he-psi-jiao/">
               <h3 class="post-title">
-                关于PLUMED中BEMeta的语法
+                关于氨基酸的phi和psi角
               </h3>
             </a>
           </div>
