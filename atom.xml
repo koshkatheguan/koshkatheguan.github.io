@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://koshkatheguan.github.io</id>
     <title>Tube with Luv</title>
-    <updated>2020-11-03T08:11:35.086Z</updated>
+    <updated>2020-11-04T05:28:51.220Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://koshkatheguan.github.io"/>
     <link rel="self" href="https://koshkatheguan.github.io/atom.xml"/>
@@ -233,18 +233,13 @@ psis = md.compute_dihedrals(traj,psiref)
         <link href="https://koshkatheguan.github.io/post/guan-yu-an-ji-suan-de-phi-he-psi-jiao/">
         </link>
         <updated>2020-10-22T07:21:54.000Z</updated>
-        <content type="html"><![CDATA[<p>在看关于钙调蛋白2step的文献时候接触到的概念。</p>
+        <content type="html"><![CDATA[<p><img src="https://koshkatheguan.github.io/post-images/1604467596144.jpg" alt="" loading="lazy"><br>
+在看关于钙调蛋白2step的文献时候接触到的概念。</p>
 <p>对第N个氨基酸</p>
 <h2 id="phi">Phi：</h2>
 <p>N-1氨基酸的C原子；N氨基酸的N、CA、C形成的二面角。</p>
 <h2 id="psi">Psi：</h2>
-<p>N氨基酸的N原子、CA、C；和N+1氨基酸的N原子形成的二面角</p>
-<p>对60？</p>
-<p>59/C, 60/N, 60/CA, 60/C<br>
-ref21 -135.866   -77.795<br>
-60/N, 60/CA, 60/C, 61/N<br>
-ref21 -43.577     -17.469</p>
-<p>28:</p>
+<p>N氨基酸的N原子、CA、C；和N+1氨基酸的N原子形成的二面角。</p>
 ]]></content>
     </entry>
     <entry>
