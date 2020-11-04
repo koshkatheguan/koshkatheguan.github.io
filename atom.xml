@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://koshkatheguan.github.io</id>
     <title>Tube with Luv</title>
-    <updated>2020-11-04T05:58:17.792Z</updated>
+    <updated>2020-11-04T07:07:11.036Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://koshkatheguan.github.io"/>
     <link rel="self" href="https://koshkatheguan.github.io/atom.xml"/>
@@ -17,13 +17,22 @@
         </link>
         <updated>2020-11-04T05:31:47.000Z</updated>
         <content type="html"><![CDATA[<p>考虑到这是koshka the 管本人的快乐老家，这些私人的东西也可以放。</p>
-<p>举个例子，书单。</p>
+<h1 id="举个例子书单">举个例子，书单。</h1>
 <ul>
 <li>Physical Biology of the Cell</li>
 <li>Kadanoff 统计力学</li>
 <li><em>是视频来着。</em> 中科院的统计力学</li>
 </ul>
 <p>考虑到必须恶补统计力学，在想以后每天上午的8-10点干脆用来学课好了。</p>
+<h1 id="关于生物分子模拟课">关于生物分子模拟课</h1>
+<p>飞哥大法好，是认真可以学到很多东西的课。<br>
+我希望：</p>
+<ul>
+<li>用python+一维玩具势把US、REMD、METAD都搓一遍。</li>
+<li>把公式推导全部搓一遍。</li>
+<li>继续整理笔记。<br>
+<img src="https://koshkatheguan.github.io/post-images/1604469989021.png" alt="" loading="lazy"></li>
+</ul>
 ]]></content>
     </entry>
     <entry>
